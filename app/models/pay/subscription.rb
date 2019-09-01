@@ -6,15 +6,14 @@ module Pay
     belongs_to :owner, class_name: Pay.billable_class, foreign_key: :owner_id
 
     # Validations
-    validates :name, presence: true
-    validates :processor, presence: true
-    validates :processor_id, presence: true
-    validates :processor_plan, presence: true
-    validates :quantity, presence: true
+    validates :name, :processor, :processor_id, :processor_plan, :quantity,
+              presence: true
 
     # Scopes
     scope :for_name, ->(name) { where(name: name) }
-    scope :on_trial, ->{ where.not(trial_ends_at: nil).where("? < trial_ends_at", Time.zone.now) }
+    scope :on_trial, ->{
+      where.not(trial_ends_at: nil).where("? < trial_ends_at", Time.zone.now)
+    }
     scope :cancelled, ->{ where.not(ends_at: nil) }
     scope :on_grace_period, ->{ cancelled.where("? < ends_at", Time.zone.now) }
     scope :active, ->{ where(ends_at: nil).or(on_grace_period).or(on_trial) }
