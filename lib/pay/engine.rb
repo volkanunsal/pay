@@ -2,11 +2,6 @@
 
 # rubocop:disable Lint/HandleExceptions
 begin
-  require 'braintree'
-rescue LoadError
-end
-
-begin
   require 'stripe'
   require 'stripe_event'
 rescue LoadError
@@ -20,7 +15,6 @@ module Pay
     initializer 'pay.processors' do |app|
       # Include processor backends
       require 'pay/stripe'    if defined? ::Stripe
-      require 'pay/braintree' if defined? ::Braintree
 
       if Pay.automount_webhook_routes
         app.routes.append do

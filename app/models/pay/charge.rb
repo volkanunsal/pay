@@ -31,13 +31,5 @@ module Pay
     def stripe?
       processor == "stripe"
     end
-
-    def braintree?
-      processor == "braintree"
-    end
-
-    def paypal?
-      braintree? && card_type == "PayPal"
-    end
   end
 end

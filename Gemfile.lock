@@ -52,8 +52,6 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     arel (9.0.0)
     ast (2.4.0)
-    braintree (2.96.0)
-      builder (>= 2.0.0)
     builder (3.2.3)
     byebug (11.0.1)
     coderay (1.1.2)
@@ -178,7 +176,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  braintree (>= 2.92.0, < 3.0)
   bundler (< 2)
   byebug
   minitest-rails (~> 3)

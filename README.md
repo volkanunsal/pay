@@ -26,9 +26,6 @@ gem 'pay'
 gem 'stripe', '< 5.0', '>= 2.8'
 gem 'stripe_event', '~> 2.2'
 
-# To use Braintree + PayPal, also include:
-gem 'braintree', '< 3.0', '>= 2.92.0'
-
 # To use Receipts
 gem 'receipts', '~> 0.2.2'
 ```
@@ -215,12 +212,6 @@ user = User.find_by(email: 'michael@bluthcompany.co')
 
 user.processor = 'stripe'
 user.card_token = 'stripe-token'
-user.charge(1500) # $15.00 USD
-
-user = User.find_by(email: 'michael@bluthcompany.co')
-
-user.processor = 'braintree'
-user.card_token = 'nonce'
 user.charge(1500) # $15.00 USD
 ```
 

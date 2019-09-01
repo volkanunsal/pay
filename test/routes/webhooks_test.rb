@@ -10,9 +10,4 @@ class WebhookRoutesTest < ActionDispatch::IntegrationTest
     post '/webhooks/stripe', as: :json
     assert_equal 200, response.status
   end
-
-  test 'braintree webhook routes get mounted correctly' do
-    post '/webhooks/braintree', as: :json
-    assert_equal 200, response.status
-  end
 end

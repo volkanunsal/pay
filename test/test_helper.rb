@@ -11,7 +11,6 @@ require "rails/test_help"
 require "minitest/rails"
 
 # Processors for testing
-require 'braintree'
 require 'stripe'
 require 'stripe_event'
 require 'stripe_mock'
@@ -43,21 +42,6 @@ VCR.configure do |c|
   c.allow_http_connections_when_no_cassette = true
 end
 
-Pay.braintree_gateway = Braintree::Gateway.new(
-  environment: :sandbox,
-  merchant_id: "zyfwpztymjqdcc5g",
-  public_key:  "5r59rrxhn89npc9n",
-  private_key: "00f0df79303e1270881e5feda7788927",
-)
-
 logger = Logger.new("/dev/null")
 logger.level = Logger::INFO
-Pay.braintree_gateway.config.logger = logger
 
-module Braintree
-  class Configuration
-    def self.gateway
-      Pay.braintree_gateway
-    end
-  end
-end
