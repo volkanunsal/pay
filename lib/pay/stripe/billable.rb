@@ -16,7 +16,7 @@ module Pay
 
       # Handles Billable#charge
       #
-      # Returns Pay::Charge
+      # Returns Stripe::Charge
       def create_stripe_charge(amount, options={})
         args = {
           amount: amount,
@@ -25,10 +25,8 @@ module Pay
           description: customer_name,
         }.merge(options)
 
-        stripe_charge = ::Stripe::Charge.create(args)
-
-        # Save the charge to the db, returns Charge
-        Pay::Stripe::Webhooks::ChargeSucceeded.new.create_charge(self, stripe_charge)
+        # NOTE: Webhook will save the charge to the db
+        ::Stripe::Charge.create(args)
       rescue ::Stripe::StripeError => e
         raise Error, e.message
       end

@@ -28,6 +28,9 @@ module Pay
       end
 
       def charge(amount_in_cents, options = {})
+        # TODO: maybe create a Charge object in the db and return it from here.
+        # Currently, it returns a Stripe::Charge object. But I'm not sure if this
+        # will be necessary...
         create_stripe_charge(amount_in_cents, options)
       end
 
