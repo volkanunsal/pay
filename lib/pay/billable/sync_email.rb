@@ -9,7 +9,7 @@ module Pay
       #
       # Processor classes simply need to implement a method named:
       #
-      # update_PROCESSOR_email!
+      # update_stripe_email!
       #
       # This method should take the email address on the billable
       # object and update the associated API record.
