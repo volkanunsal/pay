@@ -121,13 +121,16 @@ module Pay
     def pay_config(config = {})
       include BillableMixin
       config.symbolize_keys!
-      # TODO: validate config
-      pay = OpenStruct.new(config)
-      self.pay = pay
+
+      # Validate config
+      pay = Pay::Config.new(config.merge(user_class: self.name))
 
       # Run the setup class with the usable instance.
       setup_class = config.fetch(:setup_class) { 'Pay::Stripe::Setup' }.constantize
       setup_class.call(pay)
+
+      class_attribute :pay
+      self.pay = pay
     end
   end
 end

@@ -43,6 +43,8 @@ module Pay
     class_methods do
       def billable(klass_name)
         klass = klass_name.kind_of?(String) ? klass_name.constantize : klass_name
+
+        class_attribute :pay
         self.pay = klass.pay
 
         include Chargeable
