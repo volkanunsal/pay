@@ -91,7 +91,6 @@ module Pay
       def create_subscription(subscription, name, plan, qty = 1)
         subscriptions.create!(
           name: name || 'default',
-          processor: 'stripe',
           processor_id: subscription.id,
           processor_plan: plan,
           trial_ends_at: stripe_trial_end_date(subscription),

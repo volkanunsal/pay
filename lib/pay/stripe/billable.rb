@@ -106,7 +106,7 @@ module Pay
 
       def create_stripe_customer
         customer = ::Stripe::Customer.create(email: email, source: card_token, description: customer_name)
-        update(processor: 'stripe', processor_id: customer.id)
+        update(processor_id: customer.id)
 
         # Update the user's card on file if a token was passed in
         source = customer.sources.data.first
