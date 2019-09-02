@@ -15,16 +15,10 @@ module Pay
       attribute :card_token, :string
     end
 
-    def processor=(value)
-      super(value)
-      self.processor_id = nil if processor_changed?
-    end
-
     def customer
-      check_for_processor
       raise Pay::Error, "Email is required to create a customer" if email.nil?
 
-      customer = send("#{processor}_customer")
+      customer = stripe_customer
       update_card(card_token) if card_token.present?
       customer
     end
@@ -34,19 +28,16 @@ module Pay
     end
 
     def charge(amount_in_cents, options = {})
-      check_for_processor
-      send("create_#{processor}_charge", amount_in_cents, options)
+      create_stripe_charge(amount_in_cents, options)
     end
 
     def subscribe(name: 'default', plan: 'default', **options)
-      check_for_processor
-      send("create_#{processor}_subscription", name, plan, options)
+      create_stripe_subscription(name, plan, options)
     end
 
     def update_card(token)
-      check_for_processor
       customer if processor_id.nil?
-      send("update_#{processor}_card", token)
+      update_stripe_card(token)
     end
 
     def on_trial?(name: 'default', plan: nil)
@@ -63,8 +54,7 @@ module Pay
     end
 
     def processor_subscription(subscription_id)
-      check_for_processor
-      send("#{processor}_subscription", subscription_id)
+      stripe_subscription(subscription_id)
     end
 
     def subscribed?(name: 'default', processor_plan: nil)
@@ -86,30 +76,22 @@ module Pay
     end
 
     def invoice!
-      send("#{processor}_invoice!")
+      stripe_invoice!
     end
 
     def upcoming_invoice
-      send("#{processor}_upcoming_invoice")
-    end
-
-    def stripe?
-      processor == "stripe"
+      stripe_upcoming_invoice
     end
 
     private
 
-    def check_for_processor
-      raise StandardError, "No payment processor selected. Make sure to set the #{Pay.billable_class}'s `processor` attribute to 'stripe'." unless processor
-    end
-
-    def create_subscription(subscription, processor, name, plan, qty = 1)
+    def create_subscription(subscription, name, plan, qty = 1)
       subscriptions.create!(
         name: name || 'default',
-        processor: processor,
+        processor: 'stripe',
         processor_id: subscription.id,
         processor_plan: plan,
-        trial_ends_at: send("#{processor}_trial_end_date", subscription),
+        trial_ends_at: stripe_trial_end_date(subscription),
         quantity: qty,
         ends_at: nil
       )

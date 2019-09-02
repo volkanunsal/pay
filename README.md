@@ -4,8 +4,6 @@
 
 ### Payments engine for Ruby on Rails
 
-[![Build Status](https://travis-ci.org/excid3/pay.svg?branch=master)](https://travis-ci.org/excid3/pay)
-
 Pay is a payments engine for Ruby on Rails 4.2 and higher.
 
 **Current Payment Providers**
@@ -459,22 +457,3 @@ If you just want to modify where the engine mounts it's routes then you can chan
 
 config.webhooks_path = '/secret-webhook-path'
 ```
-
-## Contributors
-
-- [Jason Charnes](https://twitter.com/jmcharnes)
-- [Chris Oliver](https://twitter.com/excid3)
-
-## Contributing
-
-👋 Thanks for your interest in contributing. Feel free to fork this repo.
-
-If you have an issue you'd like to submit, please do so using the issue tracker in GitHub. In order for us to help you in the best way possible, please be as detailed as you can.
-
-If you'd like to open a PR please make sure the following things pass:
-
-- `rake test`
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).

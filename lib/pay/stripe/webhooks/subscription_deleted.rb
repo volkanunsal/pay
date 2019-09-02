@@ -5,7 +5,7 @@ module Pay
       class SubscriptionDeleted
         def call(event)
           object       = event.data.object
-          subscription = Pay.subscription_model.find_by(processor: :stripe, processor_id: object.id)
+          subscription = Pay.subscription_model.find_by(processor_id: object.id)
 
           # We couldn't find the subscription for some reason, maybe it's from another service
           return if subscription.nil?

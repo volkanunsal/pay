@@ -1,6 +1,8 @@
 module Pay
   module Billable
     module SyncEmail
+      extend ActiveSupport::Concern
+
       # Sync email address changes from the model to the processor.
       # This way they're kept in sync and email notifications are
       # always sent to the correct email address after an update.
@@ -12,7 +14,16 @@ module Pay
       # This method should take the email address on the billable
       # object and update the associated API record.
 
-      extend ActiveSupport::Concern
+      class EmailSyncJob < ActiveJob::Base
+        queue_as :default
+
+        def perform(id)
+          billable = Pay.user_model.find(id)
+          billable.sync_email_with_processor
+        rescue ActiveRecord::RecordNotFound
+          Rails.logger.info "Couldn't find a #{Pay.billable_class} with ID = #{id}"
+        end
+      end
 
       included do
         after_update :enqeue_sync_email_job,
@@ -24,7 +35,7 @@ module Pay
       end
 
       def sync_email_with_processor
-        send("update_#{processor}_email!")
+        update_stripe_email!
       end
 
       private

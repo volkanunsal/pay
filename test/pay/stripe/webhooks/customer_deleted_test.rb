@@ -9,7 +9,6 @@ class Pay::Stripe::Webhooks::CustomerDeletedTest < ActiveSupport::TestCase
   test "a customers subscription information is nulled out upon deletion" do
     user = User.create!(
       email: 'gob@bluth.com',
-      processor: :stripe,
       processor_id: @event.data.object.id,
       card_type: 'Visa',
       card_exp_month: 1,
@@ -18,7 +17,6 @@ class Pay::Stripe::Webhooks::CustomerDeletedTest < ActiveSupport::TestCase
       trial_ends_at: 3.days.from_now
     )
     subscription = user.subscriptions.create!(
-      processor: :stripe,
       processor_id: 'sub_someid',
       name: 'default',
       processor_plan: 'some-plan',

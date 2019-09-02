@@ -5,7 +5,7 @@ module Pay
       class SubscriptionUpdated
         def call(event)
           object = event.data.object
-          subscription = Pay.subscription_model.find_by(processor: :stripe, processor_id: object.id)
+          subscription = Pay.subscription_model.find_by(processor_id: object.id)
 
           return if subscription.nil?
 

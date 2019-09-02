@@ -9,11 +9,9 @@ class Pay::Stripe::Webhooks::SubscriptionDeletedTest < ActiveSupport::TestCase
   test "it sets ends_at on the subscription" do
     @user = User.create!(
       email: 'gob@bluth.com',
-      processor: :stripe,
       processor_id: @event.data.object.customer
     )
     subscription = @user.subscriptions.create!(
-      processor: :stripe,
       processor_id: @event.data.object.id,
       name: 'default',
       processor_plan: 'some-plan'
@@ -26,11 +24,9 @@ class Pay::Stripe::Webhooks::SubscriptionDeletedTest < ActiveSupport::TestCase
   test "it doesn't set ends_at on the subscription if it's already set" do
     @user = User.create!(
       email: 'gob@bluth.com',
-      processor: :stripe,
       processor_id: @event.data.object.customer
     )
     subscription = @user.subscriptions.create!(
-      processor: :stripe,
       processor_id: @event.data.object.id,
       name: 'default',
       processor_plan: 'some-plan',
@@ -44,11 +40,9 @@ class Pay::Stripe::Webhooks::SubscriptionDeletedTest < ActiveSupport::TestCase
   test "it doesn't set ends_at on the subscription if it can't find the subscription" do
     @user = User.create!(
       email: 'gob@bluth.com',
-      processor: :stripe,
       processor_id: @event.data.object.customer
     )
     subscription = @user.subscriptions.create!(
-      processor: :stripe,
       processor_id: 'does-not-exist',
       name: 'default',
       processor_plan: 'some-plan'
@@ -59,7 +53,7 @@ class Pay::Stripe::Webhooks::SubscriptionDeletedTest < ActiveSupport::TestCase
   end
 
   # test "it does nothing if subscription can't be found" do
-  #   @user = User.create!(email: 'gob@bluth.com', processor: :stripe, processor_id: @event.data.object.customer)
-  #   subscription = @user.subscriptions.create!(processor: :stripe, processor_id: 'does-not-exist', name: 'default', processor_plan: 'some-plan')
+  #   @user = User.create!(email: 'gob@bluth.com', processor_id: @event.data.object.customer)
+  #   subscription = @user.subscriptions.create!(processor_id: 'does-not-exist', name: 'default', processor_plan: 'some-plan')
   # end
 end

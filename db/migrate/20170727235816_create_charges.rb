@@ -2,7 +2,6 @@ class CreateCharges < ActiveRecord::Migration[5.1]
   def change
     create_table :pay_charges do |t|
       t.references :owner
-      t.string :processor, null: false
       t.string :processor_id, null: false
       t.integer :amount, null: false
       t.integer :amount_refunded

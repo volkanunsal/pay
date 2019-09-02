@@ -10,26 +10,19 @@ module Pay
     default_scope -> { sorted }
 
     # Validations
-    validates :amount, presence: true
-    validates :processor, presence: true
-    validates :processor_id, presence: true
-    validates :card_type, presence: true
+    validates :amount, :processor_id, :card_type, presence: true
 
     def processor_charge
-      send("#{processor}_charge")
+      stripe_charge
     end
 
     def refund!(refund_amount = nil)
       refund_amount ||= amount
-      send("#{processor}_refund!", refund_amount)
+      stripe_refund!(refund_amount)
     end
 
     def charged_to
       "#{card_type} (**** **** **** #{card_last4})"
-    end
-
-    def stripe?
-      processor == "stripe"
     end
   end
 end

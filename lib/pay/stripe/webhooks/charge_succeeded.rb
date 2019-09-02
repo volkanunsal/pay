@@ -6,7 +6,6 @@ module Pay
         def call(event)
           object = event.data.object
           user   = Pay.user_model.find_by(
-            processor: :stripe,
             processor_id: object.customer
           )
 

@@ -9,11 +9,9 @@ class Pay::Stripe::Webhooks::CustomerUpdatedTest < ActiveSupport::TestCase
   test "update_card_from stripe is called upon customer update" do
     user = User.create!(
       email: 'gob@bluth.com',
-      processor: :stripe,
       processor_id: @event.data.object.id
     )
     subscription = user.subscriptions.create!(
-      processor: :stripe,
       processor_id: 'sub_someid',
       name: 'default',
       processor_plan: 'some-plan'
@@ -26,11 +24,9 @@ class Pay::Stripe::Webhooks::CustomerUpdatedTest < ActiveSupport::TestCase
   test "update_card_from stripe is not called if user can't be found" do
     user = User.create!(
       email: 'gob@bluth.com',
-      processor: :stripe,
       processor_id: "does-not-exist"
     )
     subscription = user.subscriptions.create!(
-      processor: :stripe,
       processor_id: 'sub_someid',
       name: 'default',
       processor_plan: 'some-plan'

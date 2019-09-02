@@ -45,11 +45,11 @@ module Pay
     end
 
     def cancel
-      send("#{processor}_cancel")
+      stripe_cancel
     end
 
     def cancel_now!
-      send("#{processor}_cancel_now!")
+      stripe_cancel_now!
     end
 
     def resume
@@ -58,14 +58,14 @@ module Pay
               'You can only resume subscriptions within their grace period.'
       end
 
-      send("#{processor}_resume")
+      stripe_resume
 
       update(ends_at: nil)
       self
     end
 
     def swap(plan)
-      send("#{processor}_swap", plan)
+      stripe_swap(plan)
       update(processor_plan: plan, ends_at: nil)
     end
 

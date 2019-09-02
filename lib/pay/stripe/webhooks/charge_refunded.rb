@@ -5,7 +5,7 @@ module Pay
       class ChargeRefunded
         def call(event)
           object = event.data.object
-          charge = Pay.charge_model.find_by(processor: :stripe, processor_id: object.id)
+          charge = Pay.charge_model.find_by(processor_id: object.id)
 
           return unless charge.present?
 

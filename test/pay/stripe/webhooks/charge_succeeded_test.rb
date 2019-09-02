@@ -7,7 +7,7 @@ class Pay::Stripe::Webhooks::ChargeSucceededTest < ActiveSupport::TestCase
   end
 
   test "a charge is created" do
-    @user = User.create!(email: 'gob@bluth.com', processor: :stripe, processor_id: @event.data.object.customer)
+    @user = User.create!(email: 'gob@bluth.com', processor_id: @event.data.object.customer)
 
     assert_difference "Pay.charge_model.count" do
       Pay::Stripe::Webhooks::ChargeSucceeded.new.call(@event)
@@ -23,7 +23,7 @@ class Pay::Stripe::Webhooks::ChargeSucceededTest < ActiveSupport::TestCase
   end
 
   test "a charge isn't created if no corresponding user can be found" do
-    @user = User.create!(email: 'gob@bluth.com', processor: :stripe, processor_id: 'does-not-exist')
+    @user = User.create!(email: 'gob@bluth.com', processor_id: 'does-not-exist')
 
     assert_no_difference "Pay.charge_model.count" do
       Pay::Stripe::Webhooks::ChargeSucceeded.new.call(@event)
@@ -31,9 +31,9 @@ class Pay::Stripe::Webhooks::ChargeSucceededTest < ActiveSupport::TestCase
   end
 
   test "a charge isn't created if it already exists" do
-    @user = User.create!(email: 'gob@bluth.com', processor: :stripe, processor_id: @event.data.object.customer)
+    @user = User.create!(email: 'gob@bluth.com', processor_id: @event.data.object.customer)
 
-    @user.charges.create!(amount: 100, processor: :stripe, processor_id: 'ch_chargeid', card_type: 'Visa', card_exp_month: 1, card_exp_year: 2019, card_last4: '4444')
+    @user.charges.create!(amount: 100, processor_id: 'ch_chargeid', card_type: 'Visa', card_exp_month: 1, card_exp_year: 2019, card_last4: '4444')
 
     assert_no_difference "Pay.charge_model.count" do
       Pay::Stripe::Webhooks::ChargeSucceeded.new.call(@event)

@@ -7,13 +7,13 @@ module Pay
           object = event.data.object
 
           # We may already have the subscription in the database, so we can update that record
-          subscription = Pay.subscription_model.find_by(processor: :stripe, processor_id: object.id)
+          subscription = Pay.subscription_model.find_by(processor_id: object.id)
 
           if subscription.nil?
             # The customer should already be in the database
-            owner = Pay.user_model.find_by(processor: :stripe, processor_id: object.customer)
+            owner = Pay.user_model.find_by(processor_id: object.customer)
 
-            Rails.logger.error("[Pay] Unable to find #{Pay.user_model} with processor: :stripe and processor_id: '#{object.customer}'")
+            Rails.logger.error("[Pay] Unable to find #{Pay.user_model} with processor_id: '#{object.customer}'")
             return if owner.nil?
 
             subscription = Pay.subscription_model.new(owner: owner)

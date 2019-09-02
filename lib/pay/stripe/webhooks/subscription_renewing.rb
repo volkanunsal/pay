@@ -7,7 +7,6 @@ module Pay
           # Event is of type "invoice" see:
           # https://stripe.com/docs/api/invoices/object
           subscription = Pay.subscription_model.find_by(
-            processor: :stripe,
             processor_id: event.data.object.subscription
           )
           notify_user(subscription.owner, subscription) if subscription.present?
