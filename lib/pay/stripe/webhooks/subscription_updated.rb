@@ -2,10 +2,10 @@ module Pay
   module Stripe
     module Webhooks
 
-      class SubscriptionUpdated
+      class SubscriptionUpdated < Struct.new(:pay)
         def call(event)
           object = event.data.object
-          subscription = Pay.subscription_model.find_by(processor_id: object.id)
+          subscription = pay.subscription_model.find_by(processor_id: object.id)
 
           return if subscription.nil?
 

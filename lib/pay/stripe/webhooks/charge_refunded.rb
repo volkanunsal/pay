@@ -2,10 +2,10 @@ module Pay
   module Stripe
     module Webhooks
 
-      class ChargeRefunded
+      class ChargeRefunded < Struct.new(:pay)
         def call(event)
           object = event.data.object
-          charge = Pay.charge_model.find_by(processor_id: object.id)
+          charge = pay.charge_model.find_by(processor_id: object.id)
 
           return unless charge.present?
 
@@ -14,12 +14,8 @@ module Pay
         end
 
         def notify_user(user, charge)
-          if Pay.send_emails
-            Pay::UserMailer.refund(user, charge).deliver_later
-          end
         end
       end
-
     end
   end
 end

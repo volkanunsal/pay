@@ -78,7 +78,6 @@ module Pay
       end
     end
 
-
     # Adds the subscription methods and fields to the host class.
     #
     # Usage:

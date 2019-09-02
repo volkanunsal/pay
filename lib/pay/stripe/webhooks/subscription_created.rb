@@ -2,21 +2,21 @@ module Pay
   module Stripe
     module Webhooks
 
-      class SubscriptionCreated
+      class SubscriptionCreated < Struct.new(:pay)
         def call(event)
           object = event.data.object
 
           # We may already have the subscription in the database, so we can update that record
-          subscription = Pay.subscription_model.find_by(processor_id: object.id)
+          subscription = pay.subscription_model.find_by(processor_id: object.id)
 
           if subscription.nil?
             # The customer should already be in the database
-            owner = Pay.user_model.find_by(processor_id: object.customer)
+            owner = pay.user_model.find_by(processor_id: object.customer)
 
-            Rails.logger.error("[Pay] Unable to find #{Pay.user_model} with processor_id: '#{object.customer}'")
+            Rails.logger.error("[Pay] Unable to find #{pay.user_model} with processor_id: '#{object.customer}'")
             return if owner.nil?
 
-            subscription = Pay.subscription_model.new(owner: owner)
+            subscription = pay.subscription_model.new(owner: owner)
           end
 
           subscription.quantity       = object.quantity

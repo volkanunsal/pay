@@ -2,10 +2,10 @@ module Pay
   module Stripe
     module Webhooks
 
-      class ChargeSucceeded
+      class ChargeSucceeded < Struct.new(:pay)
         def call(event)
           object = event.data.object
-          user   = Pay.user_model.find_by(
+          user   = pay.user_model.find_by(
             processor_id: object.customer
           )
 
@@ -36,9 +36,6 @@ module Pay
         end
 
         def notify_user(user, charge)
-          if Pay.send_emails && charge.respond_to?(:receipt)
-            Pay::UserMailer.receipt(user, charge).deliver_later
-          end
         end
       end
     end

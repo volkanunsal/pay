@@ -2,10 +2,10 @@ module Pay
   module Stripe
     module Webhooks
 
-      class CustomerDeleted
+      class CustomerDeleted < Struct.new(:pay)
         def call(event)
           object = event.data.object
-          user = Pay.user_model.find_by(processor_id: object.id)
+          user = pay.user_model.find_by(processor_id: object.id)
 
           # Couldn't find user, we can skip
           return unless user.present?

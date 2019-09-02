@@ -2,10 +2,10 @@ module Pay
   module Stripe
     module Webhooks
 
-      class SubscriptionDeleted
+      class SubscriptionDeleted < Struct.new(:pay)
         def call(event)
           object       = event.data.object
-          subscription = Pay.subscription_model.find_by(processor_id: object.id)
+          subscription = pay.subscription_model.find_by(processor_id: object.id)
 
           # We couldn't find the subscription for some reason, maybe it's from another service
           return if subscription.nil?

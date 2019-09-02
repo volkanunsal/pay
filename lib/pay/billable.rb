@@ -120,9 +120,14 @@ module Pay
   class_methods do
     def pay_config(config = {})
       include BillableMixin
-
+      config.symbolize_keys!
       # TODO: validate config
-      self.pay = config
+      pay = OpenStruct.new(config)
+      self.pay = pay
+
+      # Run the setup class with the usable instance.
+      setup_class = config.fetch(:setup_class) { 'Pay::Stripe::Setup' }.constantize
+      setup_class.call(pay)
     end
   end
 end
